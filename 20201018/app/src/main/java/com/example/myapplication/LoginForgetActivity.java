@@ -1,16 +1,21 @@
-package com.example.myapplication.Util;
+package com.example.myapplication;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
+import com.example.myapplication.bean.UserInfo;
+import com.example.myapplication.database.UserDBHelper;
+
+import java.util.Map;
 
 public class LoginForgetActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -20,8 +25,8 @@ public class LoginForgetActivity extends AppCompatActivity implements View.OnCli
     private String mVerifyCode; // 验证码
     private String mPhone; // 手机号码
 
-
-
+    SharedPreferences mContextSp;
+    private UserDBHelper mHelper; // 声明一个用户数据库的帮助器对象
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +43,7 @@ public class LoginForgetActivity extends AppCompatActivity implements View.OnCli
 
         // 从前一个页面获取要修改密码的手机号码
         mPhone = getIntent().getStringExtra("phone");
+        mContextSp = this.getSharedPreferences( "share", MODE_PRIVATE );
     }
 
     public void onClick(View v) {
@@ -61,7 +67,7 @@ public class LoginForgetActivity extends AppCompatActivity implements View.OnCli
             // 点击了“确定”按钮
             String password_first = et_password_first.getText().toString();
             String password_second = et_password_second.getText().toString();
-            if (password_first.length() < 6 || password_second.length() < 6) {
+            if (password_first.length() < 8 || password_second.length() < 8) {
                 Toast.makeText(this, "请输入正确的新密码", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -72,6 +78,28 @@ public class LoginForgetActivity extends AppCompatActivity implements View.OnCli
             if (!et_verifycode.getText().toString().equals(mVerifyCode)) {
                 Toast.makeText(this, "请输入正确的验证码", Toast.LENGTH_SHORT).show();
             } else {
+                SharedPreferences shared = getSharedPreferences("share", MODE_PRIVATE);
+                Map<String, Object> mapParam = (Map<String, Object>) shared.getAll();
+
+                String input_password=password_first;
+
+                SharedPreferences.Editor editor = mContextSp.edit();
+
+                for (Map.Entry<String, Object> item_map : mapParam.entrySet()) {
+                    String key = item_map.getKey(); // 获取该配对的键信息
+
+                    if (key.equals("pwd")) {
+                        editor.putString( "pwd", input_password );
+                        editor.commit();
+                    }
+                }
+                mHelper=UserDBHelper.getInstance(this,2);
+                mHelper.openWriteLink();
+                UserInfo info=new UserInfo();
+                info.pwd=password_first;
+                mHelper.update(info,"pwd="+info.pwd);
+                mHelper.closeLink();
+
                 Toast.makeText(this, "密码修改成功", Toast.LENGTH_SHORT).show();
                 // 把修改好的新密码返回给前一个页面
                 Intent intent = new Intent();
@@ -81,4 +109,24 @@ public class LoginForgetActivity extends AppCompatActivity implements View.OnCli
             }
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // 获得用户数据库帮助器的一个实例
+        mHelper = UserDBHelper.getInstance(this, 2);
+        // 恢复页面，则打开数据库连接
+        mHelper.openWriteLink();
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // 暂停页面，则关闭数据库连接
+        mHelper.closeLink();
+    }
+
 }
