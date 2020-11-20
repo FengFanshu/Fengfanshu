@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private GoodsDBHelper mGoodsHelper; // 声明一个商品数据库的帮助器对象
     private CartDBHelper mCartHelper; // 声明一个购物车数据库的帮助器对象
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_count = findViewById(R.id.tv_count);
         ll_channel = findViewById(R.id.ll_channel);
         findViewById(R.id.iv_cart).setOnClickListener(this);
-        tv_title.setText("冯凡书商场");
+        tv_title.setText("手机商场");
     }
 
     @Override

@@ -16,8 +16,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ShoppingChannelActivity"
+            android:name=".LaunchSimpleActivity"
             android:exported="true"/>
+        <activity android:name=".FragmentDynamicActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".ShoppingChannelActivity"
+            android:exported="true" />
         <activity
             android:name=".ShoppingCartActivity"
             android:exported="true"

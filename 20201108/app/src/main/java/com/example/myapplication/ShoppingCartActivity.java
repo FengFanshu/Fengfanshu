@@ -38,7 +38,7 @@ import java.util.HashMap;
 
 public class ShoppingCartActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener  {
 
-    private final static String TAG = "ShoppingCartActivity";
+    private final static String TAG = "ShoppingCartProActivity";
     private TextView tv_total_price;
     private Group gp_content;
     private Group gp_empty;
@@ -50,7 +50,6 @@ public class ShoppingCartActivity extends AppCompatActivity implements View.OnCl
     private CartInfo mCurrentGood;  // 声明当前的商品对象
     private View mCurrentView;  // 声明一个当前视图的对象
     private Handler mHandler = new Handler();  // 声明一个处理器对象，用于长按菜单
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
