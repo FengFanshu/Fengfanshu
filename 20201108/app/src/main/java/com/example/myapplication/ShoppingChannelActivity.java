@@ -121,7 +121,7 @@ public class ShoppingChannelActivity extends AppCompatActivity implements View.O
         // 查询商品数据库中的所有商品记录
         ArrayList<GoodsInfo> goodsArray = mGoodsHelper.query("1=1");
         // 构建商场中商品网格的适配器对象
-        GoodsAdapter adapter = new GoodsAdapter(this,goodsArray,this);
+        GoodsAdapter adapter = new GoodsAdapter(this, goodsArray, this);
         // 给gv_channel设置商品网格适配器
         gv_channel.setAdapter(adapter);
         // 给gv_channel设置网格项点击监听器
@@ -159,7 +159,7 @@ public class ShoppingChannelActivity extends AppCompatActivity implements View.O
                 // 更新商品数据库中该商品记录的图片路径
                 mGoodsHelper.update(info);
             }
-        } else { // 不是首次打开
+        }else { // 不是首次打开
             // 查询商品数据库中所有商品记录
             ArrayList<GoodsInfo> goodsArray = mGoodsHelper.query("1=1");
             for (int i = 0; i < goodsArray.size(); i++) {
